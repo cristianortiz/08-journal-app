@@ -8,16 +8,17 @@ const LoginScreen = () => {
       <form>
         <input
           className="auth__input"
-          type="password"
-          placeholder="Password"
-          name="password"
-        />
-        <input
-          className="auth__input"
           type="email"
           placeholder="Email"
           name="email"
         />
+        <input
+          className="auth__input"
+          type="password"
+          placeholder="Password"
+          name="password"
+        />
+
         <button type="submit" className="btn btn-primary btn-block">
           Login
         </button>
@@ -37,7 +38,9 @@ const LoginScreen = () => {
             </p>
           </div>
         </div>
-        <NavLink to="/auth/register">Create New Account</NavLink>
+        <NavLink className="link" to="/auth/register">
+          Create New Account
+        </NavLink>
       </form>
     </>
   );
