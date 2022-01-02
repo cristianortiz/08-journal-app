@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { login } from "../../actions/auth";
+import { startGoogleLogin, startLoginEmailPassword } from "../../actions/auth";
 import useForm from "../hooks/useForm";
 
 const LoginScreen = () => {
@@ -17,7 +17,14 @@ const LoginScreen = () => {
     e.preventDefault();
     //call the dispatch to trigger login action with uid and username params
     //wich will be returned later by firebase login backend function
-    dispatch(login(23432, "Jon Doe"));
+    //dispatch(login(23432, "Jon Doe"));
+
+    //using async function from thunk middleware
+    dispatch(startLoginEmailPassword(email, password));
+  };
+
+  const handleGoogleLogin = () => {
+    dispatch(startGoogleLogin());
   };
 
   const { email, password } = formValues;
@@ -48,7 +55,7 @@ const LoginScreen = () => {
 
         <div className="auth__social-networks">
           <p>Login with </p>
-          <div className="google-btn">
+          <div className="google-btn" onClick={handleGoogleLogin}>
             <div className="google-icon-wrapper">
               <img
                 className="google-icon"

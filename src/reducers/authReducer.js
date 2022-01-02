@@ -6,7 +6,7 @@ export const authReducer = (state = {}, action) => {
       //add to store state the uid and username from firebase in success login
       return {
         uid: action.payload.uid,
-        username: action.payload.showUsername,
+        username: action.payload.displayName,
       };
     //set the store state to default as empry object in logout
     case types.logout:
