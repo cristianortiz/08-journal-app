@@ -1,5 +1,6 @@
 import { types } from "../types/types";
 
+//uiReducer to set error msg in redux global stae
 const initialState = {
   loading: false,
   msgError: null,

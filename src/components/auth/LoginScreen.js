@@ -1,26 +1,48 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { startGoogleLogin, startLoginEmailPassword } from "../../actions/auth";
 import useForm from "../hooks/useForm";
+import validator from "validator";
+import { removeError, setError } from "../../actions/ui";
 
 const LoginScreen = () => {
+  const { msgError } = useSelector((state) => state.ui);
   //reduc dispatch hooks to trigger the actions
   const dispatch = useDispatch();
   //customHook to manage form
   const [formValues, handleInputChange] = useForm({
-    email: "jon@gmail.com",
-    password: "1234",
+    email: "",
+    password: "",
   });
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     //call the dispatch to trigger login action with uid and username params
     //wich will be returned later by firebase login backend function
     //dispatch(login(23432, "Jon Doe"));
-
-    //using async function from thunk middleware
-    dispatch(startLoginEmailPassword(email, password));
+    if (isFormValid()) {
+      //using async function from thunk middleware
+      dispatch(startLoginEmailPassword(email, password));
+    }
+  };
+  //form validation function
+  const isFormValid = () => {
+    if (email.trim().length === 0) {
+      dispatch(setError("email is required"));
+      return false;
+    }
+    if (!validator.isEmail(email)) {
+      dispatch(setError("email is not valid"));
+      return false;
+    }
+    if (password.trim().length === 0) {
+      dispatch(setError("password is required"));
+      return false;
+    }
+    dispatch(removeError());
+    return true;
   };
 
   const handleGoogleLogin = () => {
@@ -32,6 +54,7 @@ const LoginScreen = () => {
     <>
       <h3 className="auth__title">Login</h3>
       <form onSubmit={handleLogin}>
+        {msgError && <div className="auth__alert-error">{msgError}</div>}
         <input
           className="auth__input"
           type="email"

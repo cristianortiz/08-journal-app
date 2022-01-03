@@ -2,10 +2,14 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import useForm from "../hooks/useForm";
 import validator from "validator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeError, setError } from "../../actions/ui";
+import { startRegisterWithEmailPasswordName } from "../../actions/auth";
 const RegisterScreen = () => {
   const dispatch = useDispatch();
+  //get data from the state ui property
+  const { msgError } = useSelector((state) => state.ui);
+
   //custom hook to process register form
   const [formValues, handleInputChange] = useForm({
     firstname: "",
@@ -15,10 +19,12 @@ const RegisterScreen = () => {
   });
   const { firstname, email, password, password_confirm } = formValues;
 
+  //handle de for submit event
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isFormValid()) {
-      console.log("Validated Form");
+      //register action dispatch
+      dispatch(startRegisterWithEmailPasswordName(email, password, firstname));
     }
   };
   //form validation function
@@ -31,7 +37,7 @@ const RegisterScreen = () => {
       dispatch(setError("email is not valid"));
       return false;
     }
-    if (password !== password_confirm && password.length < 5) {
+    if (password !== password_confirm || password.length < 5) {
       dispatch(
         setError("password must be equals and should be at least 6 characters")
       );
@@ -45,7 +51,8 @@ const RegisterScreen = () => {
     <>
       <h3 className="auth__title">Register a new account</h3>
       <form onSubmit={handleSubmit}>
-        <div className="auth__alert-error">There is errors in form</div>
+        {msgError && <div className="auth__alert-error">{msgError}</div>}
+
         <input
           className="auth__input"
           type="firstname"
