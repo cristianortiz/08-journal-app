@@ -1,7 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import useForm from "../hooks/useForm";
+import validator from "validator";
+import { useDispatch } from "react-redux";
+import { removeError, setError } from "../../actions/ui";
 const RegisterScreen = () => {
+  const dispatch = useDispatch();
   //custom hook to process register form
   const [formValues, handleInputChange] = useForm({
     firstname: "",
@@ -13,13 +17,35 @@ const RegisterScreen = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(firstname, email, password, password_confirm);
+    if (isFormValid()) {
+      console.log("Validated Form");
+    }
+  };
+  //form validation function
+  const isFormValid = () => {
+    if (firstname.trim().length === 0) {
+      dispatch(setError("firstname is required"));
+      return false;
+    }
+    if (!validator.isEmail(email)) {
+      dispatch(setError("email is not valid"));
+      return false;
+    }
+    if (password !== password_confirm && password.length < 5) {
+      dispatch(
+        setError("password must be equals and should be at least 6 characters")
+      );
+      return false;
+    }
+    dispatch(removeError());
+    return true;
   };
 
   return (
     <>
       <h3 className="auth__title">Register a new account</h3>
       <form onSubmit={handleSubmit}>
+        <div className="auth__alert-error">There is errors in form</div>
         <input
           className="auth__input"
           type="firstname"
@@ -47,7 +73,7 @@ const RegisterScreen = () => {
         />
         <input
           className="auth__input"
-          type="password_confirm"
+          type="password"
           placeholder="Repeate password"
           name="password_confirm"
           onChange={handleInputChange}
