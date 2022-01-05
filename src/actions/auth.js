@@ -3,22 +3,31 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 import { googleAuthProvider } from "../firebase/firebaseConfig";
 import { types } from "../types/types";
+import { finishLoading, startLoading } from "./ui";
 
+//login and register actions, all this are async, so this must be inside a return block
 export const startLoginEmailPassword = (email, password) => {
   return (dispatch) => {
+    //disable login button while login actions is in process
+    dispatch(startLoading());
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
       .then(async ({ user }) => {
         dispatch(login(user.uid, user.displayName));
+        //enable login button again
+        dispatch(finishLoading());
       })
       .catch((err) => console.log(err));
+    //enable login button again
+    dispatch(finishLoading());
   };
 };
-
+//register new acount action
 export const startRegisterWithEmailPasswordName = (
   email,
   password,
@@ -32,10 +41,11 @@ export const startRegisterWithEmailPasswordName = (
         await updateProfile(user, { displayName: firstname });
         dispatch(login(user.uid, user.displayName));
       })
+
       .catch((err) => console.log(err));
   };
 };
-
+//login with google button action
 export const startGoogleLogin = () => {
   return (dispatch) => {
     const auth = getAuth();
@@ -46,7 +56,7 @@ export const startGoogleLogin = () => {
     });
   };
 };
-//action to update the auth state property
+//action to update the auth state property after any of the above auth actions
 export const login = (uid, displayName) => {
   return {
     type: types.login,
@@ -56,3 +66,17 @@ export const login = (uid, displayName) => {
     },
   };
 };
+//async action because firebase auth returns a promise
+export const startLogout = () => {
+  return async (dispatch) => {
+    const auth = getAuth();
+    //fiebase method to logout
+    await signOut(auth);
+    //after the firebase logout method is executed update the auth state
+    dispatch(logout());
+  };
+};
+//this action is exportable only for testing purpuses
+export const logout = () => ({
+  type: types.logout,
+});

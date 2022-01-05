@@ -7,7 +7,8 @@ import validator from "validator";
 import { removeError, setError } from "../../actions/ui";
 
 const LoginScreen = () => {
-  const { msgError } = useSelector((state) => state.ui);
+  //get data from ui state
+  const { msgError, loading } = useSelector((state) => state.ui);
   //reduc dispatch hooks to trigger the actions
   const dispatch = useDispatch();
   //customHook to manage form
@@ -72,7 +73,12 @@ const LoginScreen = () => {
           onChange={handleInputChange}
         />
 
-        <button type="submit" className="btn btn-primary btn-block">
+        <button
+          type="submit"
+          //property depends of loading ui state value
+          disabled={loading}
+          className="btn btn-primary btn-block"
+        >
           Login
         </button>
 

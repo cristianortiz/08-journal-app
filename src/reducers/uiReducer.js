@@ -1,6 +1,6 @@
 import { types } from "../types/types";
 
-//uiReducer to set error msg in redux global stae
+//uiReducer
 const initialState = {
   loading: false,
   msgError: null,
@@ -18,6 +18,13 @@ export const uiReducer = (state = initialState, action) => {
         ...state,
         //set error msg state property to default
         msgError: null,
+      };
+    case types.uiStartLoading:
+    case types.uiFinishLoading:
+      return {
+        ...state,
+        //set error msg state property to default
+        loading: action.payload,
       };
 
     default:

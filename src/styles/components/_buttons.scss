@@ -20,7 +20,7 @@
   border-radius: 3px;
 
   &:disabled {
-    background-color: lighten($color: $primary, $amount: 1);
+    background-color: lighten($color: $primary, $amount: 10);
   }
 
   &:hover {
