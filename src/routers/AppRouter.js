@@ -7,10 +7,12 @@ import { useDispatch } from "react-redux";
 import { login } from "../actions/auth";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
+import Spinner from "../components/spinner/Spinner";
 
 const AppRouter = () => {
   //local useState to protect private routes of unauthorized access
-  const [isAuthenticated, setIsAuthenticated] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState(); //local useState to protect private routes of unauthorized access
+  const [checking, setChecking] = useState(true);
 
   const dispatch = useDispatch();
   //effect to call a observable firebase method to query the logged user data, similar to sessions
@@ -23,13 +25,19 @@ const AppRouter = () => {
         //login action to set uid and username in auth state property
         dispatch(login(user.uid, user.displayName));
         setIsAuthenticated(true);
+        setChecking(false);
       } else {
         setIsAuthenticated(false);
+        setChecking(false);
       }
       //console.log(user);
     });
     //even the "dispatch" dependency this effect executes only once
-  }, [dispatch]);
+  }, [dispatch, setChecking, setIsAuthenticated]);
+
+  if (checking) {
+    return <Spinner />;
+  }
   return (
     <>
       <Routes>

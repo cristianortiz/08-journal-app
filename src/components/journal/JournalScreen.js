@@ -1,5 +1,6 @@
 import React from "react";
 import NoteScreen from "../notes/NoteScreen";
+import Spinner from "../spinner/Spinner";
 import NothingSelected from "./NothingSelected";
 import Sidebar from "./Sidebar";
 

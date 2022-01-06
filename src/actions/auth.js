@@ -9,6 +9,7 @@ import {
 import { googleAuthProvider } from "../firebase/firebaseConfig";
 import { types } from "../types/types";
 import { finishLoading, startLoading } from "./ui";
+import Swal from "sweetalert2";
 
 //login and register actions, all this are async, so this must be inside a return block
 export const startLoginEmailPassword = (email, password) => {
@@ -22,9 +23,11 @@ export const startLoginEmailPassword = (email, password) => {
         //enable login button again
         dispatch(finishLoading());
       })
-      .catch((err) => console.log(err));
-    //enable login button again
-    dispatch(finishLoading());
+      .catch((err) => {
+        console.log(err); //enable login button again
+        dispatch(finishLoading());
+        Swal.fire("Error", "Email or Password are wrong", "error");
+      });
   };
 };
 //register new acount action
@@ -42,7 +45,10 @@ export const startRegisterWithEmailPasswordName = (
         dispatch(login(user.uid, user.displayName));
       })
 
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        Swal.fire("Error", "Email is already on use", "error");
+      });
   };
 };
 //login with google button action
