@@ -8,6 +8,8 @@ import { login } from "../actions/auth";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 import Spinner from "../components/spinner/Spinner";
+import { loadNotes } from "../helpers/loadNotes";
+import { setNotes } from "../actions/notes";
 
 const AppRouter = () => {
   //local useState to protect private routes of unauthorized access
@@ -18,19 +20,23 @@ const AppRouter = () => {
   //effect to call a observable firebase method to query the logged user data, similar to sessions
   useEffect(() => {
     const auth = getAuth();
-    //observable of user authentication
-    onAuthStateChanged(auth, (user) => {
+    //observable of user authentication, set async because firestore returns a promise when loadNotes is called
+    onAuthStateChanged(auth, async (user) => {
       //if user exists and have something in uid property
       if (user?.uid) {
         //login action to set uid and username in auth state property
         dispatch(login(user.uid, user.displayName));
+        //set authenticated flag in store
         setIsAuthenticated(true);
-        setChecking(false);
+        //helpers func to call notes data from firestore (returns a promise)
+        const notes = await loadNotes(user.uid);
+        //add the retrieved from firestore in store
+        dispatch(setNotes(notes));
       } else {
         setIsAuthenticated(false);
-        setChecking(false);
       }
       //console.log(user);
+      setChecking(false);
     });
     //even the "dispatch" dependency this effect executes only once
   }, [dispatch, setChecking, setIsAuthenticated]);
