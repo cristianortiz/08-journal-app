@@ -1,26 +1,42 @@
 import React from "react";
+import moment from "moment";
+import { activeNote } from "../../actions/notes";
+import { useDispatch } from "react-redux";
 
-const JournalEntry = () => {
+const JournalEntry = (note) => {
+  const dispatch = useDispatch();
+  const { id, date, url, title, body } = note;
+  const noteDate = moment(date);
+  //console.log(id, date, title, body, url);
+  const handleEntryClick = (idEntry) => {
+    //console.log(idEntry);
+    dispatch(activeNote(idEntry, note));
+  };
   return (
-    <div className="journal__entry pointer">
-      <div
-        className="journal__entry-picture"
-        style={{
-          backgroundSize: "cover",
-          backgroundImage:
-            "url(https://img.texasmonthly.com/2017/03/reporter-nature-the-stars-at-night-e1492539134348.jpg?auto=compress&crop=faces&fit=crop&fm=jpg&h=1050&ixlib=php-1.2.1&q=45&w=1400)",
-        }}
-      ></div>
+    <div
+      onClick={() => handleEntryClick(id)}
+      className="journal__entry pointer"
+    >
+      {
+        //if url is undefined don't show images divs
+        url && (
+          <div
+            className="journal__entry-picture"
+            style={{
+              backgroundSize: "cover",
+              backgroundImage: `url(${url})`,
+            }}
+          ></div>
+        )
+      }
       <div className="journal__entry-body">
-        <p className="journal__entry-title">A newd day</p>
-        <p className="journal__entry-content">
-          aasjdkfl jkasdljjdjj jkk jkjkj=p33.
-        </p>
+        <p className="journal__entry-title">{title}</p>
+        <p className="journal__entry-content">{body}</p>
       </div>
 
       <div className="journal__entry-date-box">
-        <span>Monday</span>
-        <h4>28</h4>
+        <span>{noteDate.format("ddd")}</span>
+        <h4>{noteDate.format("Do")}</h4>
       </div>
     </div>
   );

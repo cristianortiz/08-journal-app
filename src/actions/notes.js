@@ -1,4 +1,5 @@
 import { db, doc, collection, setDoc } from "../firebase/firebaseConfig";
+import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
 
 //aync action must have a return
@@ -27,7 +28,16 @@ export const activeNote = (id, note) => ({
     ...note,
   },
 });
-//action to set the notes retrieved from firestore in redux store
+//async action to load notes from firestore
+export const startLoadingNotes = (uid) => {
+  return async (dispatch) => {
+    //helpers func to retrieves logged user notes from firestore (returns a promise)
+    const notes = await loadNotes(uid);
+    dispatch(setNotes(notes));
+  };
+};
+
+//action to add the notes retrieved from firestore in redux store
 export const setNotes = (notes) => ({
   type: types.notesGetAll,
   payload: notes,

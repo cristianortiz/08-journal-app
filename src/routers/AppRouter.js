@@ -8,8 +8,7 @@ import { login } from "../actions/auth";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
 import Spinner from "../components/spinner/Spinner";
-import { loadNotes } from "../helpers/loadNotes";
-import { setNotes } from "../actions/notes";
+import { startLoadingNotes } from "../actions/notes";
 
 const AppRouter = () => {
   //local useState to protect private routes of unauthorized access
@@ -28,10 +27,9 @@ const AppRouter = () => {
         dispatch(login(user.uid, user.displayName));
         //set authenticated flag in store
         setIsAuthenticated(true);
-        //helpers func to call notes data from firestore (returns a promise)
-        const notes = await loadNotes(user.uid);
+
         //add the retrieved from firestore in store
-        dispatch(setNotes(notes));
+        dispatch(startLoadingNotes(user.uid));
       } else {
         setIsAuthenticated(false);
       }
