@@ -1,4 +1,10 @@
-import { db, doc, collection, setDoc } from "../firebase/firebaseConfig";
+import {
+  db,
+  doc,
+  collection,
+  setDoc,
+  updateDoc,
+} from "../firebase/firebaseConfig";
 import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
 
@@ -42,3 +48,22 @@ export const setNotes = (notes) => ({
   type: types.notesGetAll,
   payload: notes,
 });
+//async action to add the updated note in NoteScreen comp form to firestore
+export const startSaveNote = (note) => {
+  return async (dispatch, getState) => {
+    //getState to retrieve authenticated user id to
+    const { uid } = getState().auth;
+    //if note does not have an image remove url
+    if (!note.url) {
+      delete note.url;
+    }
+    //destructure the note to remove the id on update
+    const noteToFirestore = { ...note };
+    delete noteToFirestore.id;
+
+    //update the note in firetore
+    const noteRef = doc(db, `${uid}/journal/notes/${note.id}`);
+    //update the note without the id
+    await updateDoc(noteRef, noteToFirestore);
+  };
+};

@@ -5,7 +5,7 @@ import NothingSelected from "./NothingSelected";
 import Sidebar from "./Sidebar";
 
 const JournalScreen = () => {
-  const { notes, active } = useSelector((state) => state.notes);
+  const { active } = useSelector((state) => state.notes);
   return (
     <div className="journal__main-content">
       <Sidebar />

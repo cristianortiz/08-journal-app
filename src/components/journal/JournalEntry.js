@@ -8,6 +8,7 @@ const JournalEntry = (note) => {
   const { id, date, url, title, body } = note;
   const noteDate = moment(date);
   //console.log(id, date, title, body, url);
+  //when user clicks a note et it as active and shoe in NoteScreen component
   const handleEntryClick = (idEntry) => {
     //console.log(idEntry);
     dispatch(activeNote(idEntry, note));
