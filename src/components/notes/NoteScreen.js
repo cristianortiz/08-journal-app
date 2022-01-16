@@ -56,10 +56,7 @@ const NoteScreen = () => {
         ></textarea>
         {note.url && (
           <div className="notes__image">
-            <img
-              alt="notePic"
-              src="https://m.supergeek.cl/noticias/site/artic/20211223/imag/foto_0000000820211223142108/gundam_ok.jpg"
-            />
+            <img alt="notePic" src={note.url} />
           </div>
         )}
       </div>

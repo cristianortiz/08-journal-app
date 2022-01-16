@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import {
   db,
   doc,
@@ -5,8 +6,13 @@ import {
   setDoc,
   updateDoc,
 } from "../firebase/firebaseConfig";
+import { fileUpload } from "../helpers/fileUpload";
 import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
+
+//-----------------------------------------------------------
+//TODO: to add try-catch for all firebase CRUD async querys
+//-----------------------------------------------------------
 
 //aync action must have a return
 export const startNewNote = () => {
@@ -65,5 +71,37 @@ export const startSaveNote = (note) => {
     const noteRef = doc(db, `${uid}/journal/notes/${note.id}`);
     //update the note without the id
     await updateDoc(noteRef, noteToFirestore);
+    dispatch(refreshNote(note));
+    Swal.fire("Note Updated", note.title, "success");
+  };
+};
+
+//action to show in sidebar a specific updated note
+export const refreshNote = (note) => ({
+  type: types.notesUpdate,
+  payload: note,
+});
+
+//action to show in sidebar a specific updated note
+export const startUploading = (file) => {
+  //getState is a func to get date from state, similar to useSelector
+  return async (dispatch, getState) => {
+    //get the active note from note store
+    const { active: activeNote } = getState().notes;
+    //show an alert while the file is being uploading
+    Swal.fire({
+      title: "Uploading...",
+      text: "Please wait...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      willOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    const fileURL = await fileUpload(file);
+    activeNote.url = fileURL;
+    //updating note with the image url
+    dispatch(startSaveNote(activeNote));
+    Swal.close();
   };
 };
