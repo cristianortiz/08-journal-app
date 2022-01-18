@@ -12,6 +12,11 @@ export const notesReducer = (state = initialState, action) => {
         ...state,
         active: { ...action.payload },
       };
+    case types.notesAddNew:
+      return {
+        ...state,
+        notes: [action.payload, ...state.notes],
+      };
     case types.notesGetAll:
       return {
         ...state,
@@ -25,7 +30,19 @@ export const notesReducer = (state = initialState, action) => {
           note.id === action.payload.id ? action.payload : note
         ),
       };
-
+    case types.notesDelete:
+      return {
+        ...state,
+        active: null, //the active note has being deleted in firestore
+        //return the state whitout the note deleted from firestore
+        notes: state.notes.filter((note) => note.id !== action.payload),
+      };
+    case types.notesLogoutCleanup:
+      return {
+        ...state,
+        active: null,
+        notes: [],
+      };
     default:
       return state;
   }

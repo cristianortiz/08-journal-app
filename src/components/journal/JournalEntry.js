@@ -8,7 +8,7 @@ const JournalEntry = (note) => {
   const { id, date, url, title, body } = note;
   const noteDate = moment(date);
   //console.log(id, date, title, body, url);
-  //when user clicks a note et it as active and shoe in NoteScreen component
+  //when user clicks a note set as active and show it in NoteScreen to be completed or updated
   const handleEntryClick = (idEntry) => {
     //console.log(idEntry);
     dispatch(activeNote(idEntry, note));
@@ -16,7 +16,7 @@ const JournalEntry = (note) => {
   return (
     <div
       onClick={() => handleEntryClick(id)}
-      className="journal__entry pointer"
+      className="journal__entry pointer animate__animated animate__fadeIn animate__faster"
     >
       {
         //if url is undefined don't show images divs

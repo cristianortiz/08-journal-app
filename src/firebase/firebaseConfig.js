@@ -6,6 +6,7 @@ import {
   getDocs,
   collection,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { GoogleAuthProvider } from "firebase/auth";
 
@@ -25,4 +26,13 @@ const db = getFirestore();
 
 const googleAuthProvider = new GoogleAuthProvider();
 //db, doc, SetDoc,colletion, for firestore DB crud operations
-export { db, googleAuthProvider, doc, setDoc, getDocs, collection, updateDoc };
+export {
+  db,
+  googleAuthProvider,
+  doc,
+  setDoc,
+  getDocs,
+  collection,
+  updateDoc,
+  deleteDoc,
+};

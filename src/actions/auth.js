@@ -10,6 +10,7 @@ import { googleAuthProvider } from "../firebase/firebaseConfig";
 import { types } from "../types/types";
 import { finishLoading, startLoading } from "./ui";
 import Swal from "sweetalert2";
+import { noteLogout } from "./notes";
 
 //login and register actions, all this are async, so this must be inside a return block
 export const startLoginEmailPassword = (email, password) => {
@@ -80,6 +81,8 @@ export const startLogout = () => {
     await signOut(auth);
     //after the firebase logout method is executed update the auth state
     dispatch(logout());
+    //clean note store
+    dispatch(noteLogout());
   };
 };
 //this action is exportable only for testing purpuses

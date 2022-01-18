@@ -2,16 +2,16 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NotesAppBar from "./NotesAppBar";
 import useForm from "../hooks/useForm";
-import { activeNote } from "../../actions/notes";
+import { activeNote, startDeleting } from "../../actions/notes";
 
 const NoteScreen = () => {
   const dispatch = useDispatch();
   //get active note from store
   const { active: note } = useSelector((state) => state.notes);
-  //custom hook to handle form and shownote fields in the notes form input values
+  //custom hook to handle form and show the note fields in the notes form input values
   const [formValues, handleInputChange, reset] = useForm(note);
   //extract updated values of the form input values
-  const { body, title } = formValues;
+  const { body, title, id } = formValues;
   //trigger the effect only if the note id changes when user clicks, useRef to keep reference tonote.id
   const refNoteID = useRef(note.id);
   useEffect(() => {
@@ -32,6 +32,10 @@ const NoteScreen = () => {
     dispatch(activeNote(formValues.id, { ...formValues }));
   }, [formValues, dispatch]);
 
+  const handleDelete = () => {
+    // console.log(id);
+    dispatch(startDeleting(id));
+  };
   return (
     <div className="notes__main-content">
       <NotesAppBar />
@@ -60,6 +64,9 @@ const NoteScreen = () => {
           </div>
         )}
       </div>
+      <button onClick={handleDelete} className="btn btn-danger">
+        Delete
+      </button>
     </div>
   );
 };
