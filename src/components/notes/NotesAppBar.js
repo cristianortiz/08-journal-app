@@ -5,7 +5,7 @@ import { startSaveNote, startUploading } from "../../actions/notes";
 
 const NotesAppBar = () => {
   const dispatch = useDispatch();
-  //get active note from store, REC: is the one deployed in the NoteScreen comp
+  //get active note from store, REC: is the note clicked in sidebar and deployed in the NoteScreen comp
   const { active: note } = useSelector((state) => state.notes);
   const noteDate = moment(note.date);
 
