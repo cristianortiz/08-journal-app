@@ -18,9 +18,22 @@ const firebaseConfig = {
   messagingSenderId: "232388166690",
   appId: "1:232388166690:web:690ac5489d48d164bbf67b",
 };
+//testing app in firebase
+const firebaseConfigTesting = {
+  apiKey: "AIzaSyAnBavTfIKjNm5GhY2GAwzi-_Y2_SbWHpg",
+  authDomain: "journalapptesting-2a915.firebaseapp.com",
+  projectId: "journalapptesting-2a915",
+  storageBucket: "journalapptesting-2a915.appspot.com",
+  messagingSenderId: "968146106483",
+  appId: "1:968146106483:web:90cfe0bd946883bdeb5206",
+};
 
-// Initialize Firebase
-initializeApp(firebaseConfig);
+// Initialize Firebase testing or dev/production
+if (process.env.NODE_ENV === "test") {
+  initializeApp(firebaseConfigTesting);
+} else {
+  initializeApp(firebaseConfig);
+}
 
 const db = getFirestore();
 

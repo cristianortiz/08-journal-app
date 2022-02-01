@@ -34,7 +34,7 @@ describe("Tests in authReducer", () => {
     };
     //the state when the logout action is called
     const state = authReducer(initState, action);
-    //at logout the state comeback to be an empty object
+    //at logout the state must be and empty object again
     expect(state).toEqual({});
   });
 

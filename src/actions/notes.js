@@ -32,7 +32,7 @@ export const startNewNote = () => {
     //save new note in firebase
     const ref = doc(collection(db, `${uid}/journal/notes`));
     await setDoc(ref, newNote);
-    console.log(ref);
+    //console.log(ref);
     //set new empty note as the activate a note to show it in NoteScreen
     dispatch(activeNote(ref.id, newNote));
     //add the new empty note to store and show it in sidebar
